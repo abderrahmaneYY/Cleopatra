@@ -420,7 +420,7 @@
 
         // STARS
         const starsEl = document.getElementById('stars');
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < 40; i++) {
             const s = document.createElement('div');
             s.className = 'star';
             const size = Math.random() * 3 + 1;
@@ -455,6 +455,7 @@
         }
 
         function spawnButterfly() {
+            if (bfContainer.children.length >= 5) return;
             const c = colors[Math.floor(Math.random() * colors.length)];
             const bf = document.createElement('div');
             bf.className = 'butterfly';
@@ -469,13 +470,13 @@
             setTimeout(() => bf.remove(), (duration + delay + 2) * 1000);
         }
 
-        for (let i = 0; i < 12; i++) spawnButterfly();
-        setInterval(spawnButterfly, 2000);
+        for (let i = 0; i < 4; i++) spawnButterfly();
+        setInterval(spawnButterfly, 4000);
 
         // CONFETTI BURST on load
         function launchConfetti() {
             const cfColors = ['#d4af37','#f5e6a3','#c9506a','#f5a0b5','#9b72cf','#d4b8f0','#ffffff','#fdd0e8'];
-            for (let i = 0; i < 180; i++) {
+            for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
                     const p = document.createElement('div');
                     p.className = 'confetti-piece';
@@ -498,8 +499,8 @@
 
         // Second burst after 3 seconds
         launchConfetti();
-        setTimeout(launchConfetti, 4000);
-        setTimeout(launchConfetti, 8000);
+        
+        
     </script>
 </body>
 </html>

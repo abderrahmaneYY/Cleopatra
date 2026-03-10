@@ -113,13 +113,13 @@
         const cursor=document.getElementById('cursor');
         document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});
         const starsEl=document.getElementById('stars');
-        for(let i=0;i<150;i++){const s=document.createElement('div');s.className='star';const size=Math.random()*3+1;s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*4+2}s;--delay:${Math.random()*5}s;--op:${Math.random()*.6+.2}`;starsEl.appendChild(s)}
+        for(let i=0;i<40;i++){const s=document.createElement('div');s.className='star';const size=Math.random()*3+1;s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*4+2}s;--delay:${Math.random()*5}s;--op:${Math.random()*.6+.2}`;starsEl.appendChild(s)}
         const bfContainer=document.getElementById('butterflies');
         const bfColors=[{wing:'#f5e6a3',body:'#d4af37',glow:'rgba(212,175,55,.8)'},{wing:'#f5a0b5',body:'#c9506a',glow:'rgba(201,80,106,.7)'},{wing:'#d4b8f0',body:'#9b72cf',glow:'rgba(155,114,207,.7)'},{wing:'#fdd0e8',body:'#e8a0c0',glow:'rgba(232,160,192,.7)'},{wing:'#ffffff',body:'#d4af37',glow:'rgba(255,255,255,.5)'}];
         function makeSVG(c){return`<svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><ellipse cx="18" cy="16" rx="16" ry="12" fill="${c.wing}" opacity="0.85" transform="rotate(-20,18,16)"/><ellipse cx="14" cy="28" rx="12" ry="8" fill="${c.wing}" opacity="0.75" transform="rotate(10,14,28)"/><ellipse cx="42" cy="16" rx="16" ry="12" fill="${c.wing}" opacity="0.85" transform="rotate(20,42,16)"/><ellipse cx="46" cy="28" rx="12" ry="8" fill="${c.wing}" opacity="0.75" transform="rotate(-10,46,28)"/><ellipse cx="20" cy="17" rx="7" ry="5" fill="${c.body}" opacity="0.3" transform="rotate(-20,20,17)"/><ellipse cx="40" cy="17" rx="7" ry="5" fill="${c.body}" opacity="0.3" transform="rotate(20,40,17)"/><ellipse cx="30" cy="20" rx="3" ry="14" fill="${c.body}"/><line x1="30" y1="8" x2="20" y2="0" stroke="${c.body}" stroke-width="1.2" stroke-linecap="round"/><line x1="30" y1="8" x2="40" y2="0" stroke="${c.body}" stroke-width="1.2" stroke-linecap="round"/><circle cx="20" cy="0" r="2" fill="${c.body}"/><circle cx="40" cy="0" r="2" fill="${c.body}"/></svg>`}
         function spawnButterfly(){const c=bfColors[Math.floor(Math.random()*bfColors.length)];const bf=document.createElement('div');bf.className='butterfly';const size=Math.random()*40+20,startY=Math.random()*85+5,drift=(Math.random()-.5)*200,dur=Math.random()*18+12,delay=Math.random()*10;bf.style.cssText=`--size:${size}px;--start-y:${startY}vh;--drift:${drift}px;--fly-d:${dur}s;--fly-delay:${delay}s;--rot:${(Math.random()-.5)*20}deg;--glow:${c.glow};top:0;left:0;`;bf.innerHTML=makeSVG(c);bfContainer.appendChild(bf);setTimeout(()=>bf.remove(),(dur+delay+2)*1000)}
-        for(let i=0;i<10;i++)spawnButterfly();
-        setInterval(spawnButterfly,2200);
+        for(let i=0;i<4;i++)spawnButterfly();
+        setInterval(spawnButterfly,4000);
     </script>
 </body>
 </html>
