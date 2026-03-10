@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why You're Amazing, Chaimae 🦋</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none}
+        :root{--gold:#d4af37;--rose:#c9506a;--deep:#1a0a2e;--lavender:#9b72cf;--blush:#f5c6d0;--cream:#fdf6e3}
+        body{min-height:100vh;background:var(--deep);font-family:'Cormorant Garamond',serif;overflow-x:hidden;padding:2rem 1rem 4rem}
+        .cursor{position:fixed;width:32px;height:32px;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+        .bg-gradient{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 20% 20%,rgba(155,114,207,.35) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(201,80,106,.25) 0%,transparent 50%),#0d0520;animation:bgShift 8s ease-in-out infinite alternate}
+        @keyframes bgShift{0%{filter:brightness(1)}100%{filter:brightness(1.15)}}
+        .stars{position:fixed;inset:0;z-index:0;overflow:hidden}
+        .star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s);opacity:0}
+        @keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:var(--op,.8);transform:scale(1)}}
+        .butterfly-container{position:fixed;inset:0;pointer-events:none;z-index:1}
+        .butterfly{position:absolute;animation:flyAcross var(--fly-d,20s) linear var(--fly-delay,0s) infinite;opacity:0}
+        .butterfly svg{width:var(--size,40px);height:var(--size,40px);animation:flapWings .35s ease-in-out infinite alternate;filter:drop-shadow(0 0 8px var(--glow,rgba(212,175,55,.6)))}
+        @keyframes flyAcross{0%{transform:translate(-150px,var(--start-y,200px));opacity:0}5%{opacity:1}95%{opacity:1}100%{transform:translate(110vw,calc(var(--start-y,200px) + var(--drift,-50px)));opacity:0}}
+        @keyframes flapWings{0%{transform:scaleX(1)}100%{transform:scaleX(.25)}}
+        .floating{position:fixed;pointer-events:none;z-index:2}
+        .container{position:relative;z-index:10;max-width:800px;margin:0 auto;text-align:center}
+        .page-header{padding:2rem 0 1rem;opacity:0;animation:fadeUp 1s ease .3s forwards}
+        .ornament{display:flex;align-items:center;gap:1rem;justify-content:center;margin-bottom:1.2rem}
+        .ornament-line{width:60px;height:1px;background:linear-gradient(to right,transparent,var(--gold))}
+        .ornament-line.right{background:linear-gradient(to left,transparent,var(--gold))}
+        h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.5rem,5vw,3rem);font-weight:900;background:linear-gradient(135deg,#f5e6a3,var(--gold),var(--rose),var(--lavender),var(--gold));background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite;line-height:1.2;margin-bottom:.5rem}
+        @keyframes shimmer{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+        .page-subtitle{font-style:italic;color:var(--blush);font-size:clamp(.85rem,2vw,1.1rem);letter-spacing:.25em}
+        .reason-card{background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:2rem;margin:1.2rem 0;backdrop-filter:blur(12px);box-shadow:0 5px 30px rgba(155,114,207,.1),inset 0 0 20px rgba(212,175,55,.03);transition:transform .3s,box-shadow .3s,border-color .3s;position:relative;overflow:hidden}
+        .reason-card:hover{transform:translateY(-6px);box-shadow:0 15px 40px rgba(212,175,55,.2);border-color:rgba(212,175,55,.6)}
+        .reason-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(212,175,55,.08),transparent);transition:.6s}
+        .reason-card:hover::before{left:100%}
+        .reason-text{font-size:clamp(1rem,2.2vw,1.25rem);color:var(--cream);line-height:1.9;position:relative;z-index:2}
+        .reason-emoji{font-size:1.8rem;display:block;margin-bottom:.8rem}
+
+        .reason-counter{font-style:italic;color:rgba(212,175,55,.6);font-size:.9rem;letter-spacing:.2em;margin:.5rem 0 1.5rem}
+        .shuffle-button{font-family:'Cinzel Decorative',cursive;font-size:clamp(.75rem,2vw,.95rem);font-weight:700;background:linear-gradient(135deg,var(--gold),#e8c840,var(--gold));background-size:200%;color:var(--deep);border:none;border-radius:50px;padding:1rem 2.5rem;letter-spacing:.08em;box-shadow:0 5px 25px rgba(212,175,55,.4);transition:all .3s ease;animation:btnShimmer 3s linear infinite;margin:1rem 0}
+        @keyframes btnShimmer{0%{background-position:0%}100%{background-position:200%}}
+        .shuffle-button:hover{transform:scale(1.08) translateY(-3px);box-shadow:0 12px 40px rgba(212,175,55,.6)}
+        .shuffle-button.story-mode{background:linear-gradient(135deg,var(--lavender),var(--rose),var(--gold));color:white}
+        .ending-section{margin-top:3rem;padding:2rem}
+        .teddy-hug{width:220px;margin:0 auto 1.5rem;border-radius:20px;overflow:hidden;border:2px solid rgba(212,175,55,.4);box-shadow:0 0 40px rgba(212,175,55,.2)}
+        .teddy-hug img{width:100%;display:block}
+        .ending-text{font-family:'Cinzel Decorative',cursive;font-size:clamp(1rem,3vw,1.8rem);background:linear-gradient(135deg,var(--gold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite}
+        ::-webkit-scrollbar{width:8px}
+        ::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
+        ::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold),var(--rose));border-radius:4px}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+        @media(max-width:480px){.reason-card{padding:1.5rem 1rem}}
+    </style>
+</head>
+<body>
+    <div class="cursor" id="cursor">
+        <svg viewBox="0 0 24 24">
+            <path fill="#d4af37" d="M12 3c0 0-4 4-4 8s1.8 5.5 4 7c2.2-1.5 4-3 4-7s-4-8-4-8z"/>
+            <path fill="#c9506a" d="M12 3c0 0 5 3 7 7s-2 8-7 8c5 0 7-4 7-8S12 3 12 3z" opacity="0.6"/>
+            <path fill="#9b72cf" d="M12 3c0 0-7 3-7 7s2 8 7 8c-5 0-7-4-7-8S12 3 12 3z" opacity="0.6"/>
+        </svg>
+    </div>
+    <div class="bg-gradient"></div>
+    <div class="stars" id="stars"></div>
+    <div class="butterfly-container" id="butterflies"></div>
+    <div class="container">
+        <div class="page-header">
+            <div class="ornament">
+                <div class="ornament-line"></div>
+                <span style="color:var(--gold);font-size:1.3rem">🦋</span>
+                <div class="ornament-line right"></div>
+            </div>
+            <h1>Why You're Amazing</h1>
+            <p class="page-subtitle">~ A few truths about our Cleopatra ~</p>
+        </div>
+        <div id="reasons-container"></div>
+        <button class="shuffle-button" id="shuffleBtn">Reveal a Reason 💛</button>
+        <div class="reason-counter" id="reasonCounter"></div>
+        <div class="ending-section" id="endingSection" style="display:none">
+            <div class="teddy-hug"><img src="./d1.jpg" alt="Chaimae"></div>
+            <div class="ending-text">You're the Most Magical Soul ✨👑</div>
+        </div>
+    </div>
+    <script>
+        const cursor=document.getElementById('cursor');
+        document.addEventListener('mousemove',e=>{gsap.to(cursor,{x:e.clientX,y:e.clientY,duration:.15})});
+        const starsEl=document.getElementById('stars');
+        for(let i=0;i<120;i++){const s=document.createElement('div');s.className='star';const size=Math.random()*3+1;s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*4+2}s;--delay:${Math.random()*5}s;--op:${Math.random()*.6+.2}`;starsEl.appendChild(s)}
+        const bfContainer=document.getElementById('butterflies');
+        const bfColors=[{wing:'#f5e6a3',body:'#d4af37',glow:'rgba(212,175,55,.8)'},{wing:'#f5a0b5',body:'#c9506a',glow:'rgba(201,80,106,.7)'},{wing:'#d4b8f0',body:'#9b72cf',glow:'rgba(155,114,207,.7)'},{wing:'#fdd0e8',body:'#e8a0c0',glow:'rgba(232,160,192,.7)'}];
+        function makeSVG(c){return`<svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><ellipse cx="18" cy="16" rx="16" ry="12" fill="${c.wing}" opacity="0.85" transform="rotate(-20,18,16)"/><ellipse cx="14" cy="28" rx="12" ry="8" fill="${c.wing}" opacity="0.75" transform="rotate(10,14,28)"/><ellipse cx="42" cy="16" rx="16" ry="12" fill="${c.wing}" opacity="0.85" transform="rotate(20,42,16)"/><ellipse cx="46" cy="28" rx="12" ry="8" fill="${c.wing}" opacity="0.75" transform="rotate(-10,46,28)"/><ellipse cx="20" cy="17" rx="7" ry="5" fill="${c.body}" opacity="0.3" transform="rotate(-20,20,17)"/><ellipse cx="40" cy="17" rx="7" ry="5" fill="${c.body}" opacity="0.3" transform="rotate(20,40,17)"/><ellipse cx="30" cy="20" rx="3" ry="14" fill="${c.body}"/><line x1="30" y1="8" x2="20" y2="0" stroke="${c.body}" stroke-width="1.2" stroke-linecap="round"/><line x1="30" y1="8" x2="40" y2="0" stroke="${c.body}" stroke-width="1.2" stroke-linecap="round"/><circle cx="20" cy="0" r="2" fill="${c.body}"/><circle cx="40" cy="0" r="2" fill="${c.body}"/></svg>`}
+        function spawnButterfly(){const c=bfColors[Math.floor(Math.random()*bfColors.length)];const bf=document.createElement('div');bf.className='butterfly';const size=Math.random()*35+20,startY=Math.random()*85+5,drift=(Math.random()-.5)*200,dur=Math.random()*18+12,delay=Math.random()*10;bf.style.cssText=`--size:${size}px;--start-y:${startY}vh;--drift:${drift}px;--fly-d:${dur}s;--fly-delay:${delay}s;--rot:${(Math.random()-.5)*20}deg;--glow:${c.glow};top:0;left:0;`;bf.innerHTML=makeSVG(c);bfContainer.appendChild(bf);setTimeout(()=>bf.remove(),(dur+delay+2)*1000)}
+        for(let i=0;i<8;i++)spawnButterfly();
+        setInterval(spawnButterfly,2500);
+        function createFloating(){const emojis=['🦋','✨','👑','💛','🌸'];const el=document.createElement('div');el.className='floating';el.textContent=emojis[Math.floor(Math.random()*emojis.length)];el.style.cssText=`left:${Math.random()*window.innerWidth}px;top:${Math.random()*window.innerHeight}px;font-size:${Math.random()*20+10}px;opacity:.8;`;document.body.appendChild(el);gsap.to(el,{y:-500,duration:Math.random()*10+8,opacity:0,onComplete:()=>el.remove()})}
+        setInterval(createFloating,2000);
+        const reasons=[
+            {text:"You carry a rare kind of magic, Chaimae — the kind that makes every room feel warmer just by you being in it. 🌸",emoji:"🦋"},
+            {text:"You are Cleopatra reborn — timeless beauty, fierce grace, and a heart made of pure gold. 👑",emoji:"✨"},
+            {text:"Your smile is the kind that stays with people long after you've left the room. Truly unforgettable. 💛",emoji:"🌟"},
+            {text:"May every butterfly that crosses your path carry a wish just for you — because you deserve every single one. 🦋",emoji:"💫"},
+            {text:"You spread light without even trying. That is the rarest and most beautiful gift a soul can have. ✨",emoji:"🌸"}
+        ];
+        let currentIndex=0,isTransitioning=false;
+        const container=document.getElementById('reasons-container');
+        const btn=document.getElementById('shuffleBtn');
+        const counter=document.getElementById('reasonCounter');
+        function createCard(r){const card=document.createElement('div');card.className='reason-card';card.innerHTML=`<span class="reason-emoji">${r.emoji}</span><div class="reason-text">${r.text}</div>`;gsap.from(card,{opacity:0,y:50,duration:.6,ease:"back.out(1.4)"});return card}
+        function showReason(){if(isTransitioning)return;isTransitioning=true;if(currentIndex<reasons.length){const card=createCard(reasons[currentIndex]);container.appendChild(card);counter.textContent=`✨ ${currentIndex+1} of ${reasons.length} ✨`;currentIndex++;createFloating();if(currentIndex===reasons.length){gsap.to(btn,{scale:1.1,duration:.5,ease:"elastic.out(1,.5)",onComplete:()=>{btn.textContent="See Our Memories 🦋";btn.classList.add('story-mode');btn.onclick=()=>{gsap.to('body',{opacity:0,duration:1,onComplete:()=>{window.location.href='last.html'}})}}});const ending=document.getElementById('endingSection');ending.style.display='block';gsap.from(ending,{opacity:0,y:30,duration:1,delay:.3})}setTimeout(()=>{isTransitioning=false},600)}}
+        btn.addEventListener('click',()=>{if(!btn.classList.contains('story-mode')){gsap.to(btn,{scale:.9,duration:.1,yoyo:true,repeat:1});showReason()}});
+    </script>
+</body>
+</html>
