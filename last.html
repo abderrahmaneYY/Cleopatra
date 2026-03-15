@@ -105,7 +105,7 @@
         <p>Every laugh, every butterfly moment, every little thing we've shared — it's all <span class="highlight">truly special</span>, Chaimae.</p>
         <p>You deserve a life as beautiful as the way you make others feel. May this year bring you <span class="highlight">love, magic, and every dream</span> your heart whispers. 🌸</p>
         <p>Keep shining, Queen. The world is brighter because you're in it. ✨</p>
-        <a href="birthday_reveal.html" class="goodbye-btn">Back to the Beginning 🦋</a>
+        <a href="follow.html" class="goodbye-btn">One Last Thing... 🦋</a>
         <div class="bottom-ornament">♕ 🦋 ♕</div>
     </section>
 
@@ -120,6 +120,64 @@
         function spawnButterfly(){const c=bfColors[Math.floor(Math.random()*bfColors.length)];const bf=document.createElement('div');bf.className='butterfly';const size=Math.random()*40+20,startY=Math.random()*85+5,drift=(Math.random()-.5)*200,dur=Math.random()*18+12,delay=Math.random()*10;bf.style.cssText=`--size:${size}px;--start-y:${startY}vh;--drift:${drift}px;--fly-d:${dur}s;--fly-delay:${delay}s;--rot:${(Math.random()-.5)*20}deg;--glow:${c.glow};top:0;left:0;`;bf.innerHTML=makeSVG(c);bfContainer.appendChild(bf);setTimeout(()=>bf.remove(),(dur+delay+2)*1000)}
         for(let i=0;i<4;i++)spawnButterfly();
         setInterval(spawnButterfly,4000);
+    </script>
+    <audio id="bgMusic" loop src="song.mp3" preload="auto"></audio>
+
+    <!-- VOLUME CONTROL -->
+    <div id="volumeWidget" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;align-items:center;gap:10px;background:rgba(13,5,32,0.75);border:1px solid rgba(212,175,55,0.4);border-radius:50px;padding:10px 18px;backdrop-filter:blur(12px);box-shadow:0 4px 24px rgba(212,175,55,0.15);">
+        <span id="volIcon" style="font-size:1.2rem;cursor:pointer;user-select:none;" title="Mute/Unmute">🔊</span>
+        <input id="volSlider" type="range" min="0" max="100" value="50" style="-webkit-appearance:none;width:100px;height:4px;border-radius:2px;background:linear-gradient(to right,#d4af37 50%,rgba(255,255,255,0.15) 50%);outline:none;cursor:pointer;"/>
+        <span id="volValue" style="color:#d4af37;font-family:'Cormorant Garamond',serif;font-size:0.9rem;min-width:32px;">50%</span>
+    </div>
+
+    <style>
+        #volSlider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#d4af37;box-shadow:0 0 6px rgba(212,175,55,0.8);cursor:pointer;}
+        #volSlider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#d4af37;box-shadow:0 0 6px rgba(212,175,55,0.8);cursor:pointer;border:none;}
+    </style>
+
+    <script>
+        (function(){
+            const music   = document.getElementById('bgMusic');
+            const slider  = document.getElementById('volSlider');
+            const volVal  = document.getElementById('volValue');
+            const volIcon = document.getElementById('volIcon');
+            const savedVol = parseFloat(sessionStorage.getItem('bgVol') ?? '0.5');
+            music.volume = savedVol;
+            slider.value = Math.round(savedVol * 100);
+            volVal.textContent = slider.value + '%';
+            updateTrack();
+            const savedTime = parseFloat(sessionStorage.getItem('bgTime') ?? '0');
+            music.addEventListener('canplay', () => {
+                if (savedTime > 0 && savedTime < music.duration) music.currentTime = savedTime;
+                music.play().catch(()=>{});
+            }, { once: true });
+            setInterval(() => { if (!music.paused) sessionStorage.setItem('bgTime', music.currentTime); }, 1000);
+            slider.addEventListener('input', () => {
+                const val = slider.value / 100;
+                music.volume = val;
+                sessionStorage.setItem('bgVol', val);
+                volVal.textContent = slider.value + '%';
+                volIcon.textContent = val === 0 ? '🔇' : val < 0.4 ? '🔉' : '🔊';
+                updateTrack();
+            });
+            let lastVol = savedVol || 0.5;
+            volIcon.addEventListener('click', () => {
+                if (music.volume > 0) {
+                    lastVol = music.volume; music.volume = 0; slider.value = 0;
+                    volVal.textContent = '0%'; volIcon.textContent = '🔇';
+                } else {
+                    music.volume = lastVol; slider.value = Math.round(lastVol * 100);
+                    volVal.textContent = slider.value + '%';
+                    volIcon.textContent = lastVol < 0.4 ? '🔉' : '🔊';
+                }
+                sessionStorage.setItem('bgVol', music.volume);
+                updateTrack();
+            });
+            function updateTrack(){
+                const pct = slider.value + '%';
+                slider.style.background = `linear-gradient(to right,#d4af37 ${pct},rgba(255,255,255,0.15) ${pct})`;
+            }
+        })();
     </script>
 </body>
 </html>

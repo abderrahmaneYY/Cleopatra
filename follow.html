@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Very Important Question 🦋</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none}
+        :root{--gold:#d4af37;--rose:#c9506a;--deep:#1a0a2e;--lavender:#9b72cf;--blush:#f5c6d0;--cream:#fdf6e3;--red:#ff2020;--green:#00ff88}
+        body{min-height:100vh;background:var(--deep);font-family:'Cormorant Garamond',serif;overflow:hidden;display:flex;align-items:center;justify-content:center}
+        .cursor{position:fixed;width:32px;height:32px;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+        .bg-gradient{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 20% 20%,rgba(155,114,207,.35) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(201,80,106,.25) 0%,transparent 50%),#0d0520;animation:bgShift 8s ease-in-out infinite alternate}
+        @keyframes bgShift{0%{filter:brightness(1)}100%{filter:brightness(1.15)}}
+        .stars{position:fixed;inset:0;z-index:0;overflow:hidden}
+        .star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s);opacity:0}
+        @keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:var(--op,.8);transform:scale(1)}}
+
+        .screen{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;transition:opacity .5s ease}
+        .screen.hidden{opacity:0;pointer-events:none}
+
+        .card{background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.35);border-radius:28px;padding:3rem 2.5rem;max-width:540px;width:100%;backdrop-filter:blur(16px);box-shadow:0 0 80px rgba(155,114,207,.2),inset 0 0 40px rgba(212,175,55,.04)}
+        .ornament{display:flex;align-items:center;gap:1rem;justify-content:center;margin-bottom:1.5rem}
+        .ornament-line{width:60px;height:1px;background:linear-gradient(to right,transparent,var(--gold))}
+        .ornament-line.r{background:linear-gradient(to left,transparent,var(--gold))}
+
+        .pfp-wrap{position:relative;width:110px;height:110px;margin:0 auto 1.5rem;animation:floatPfp 3s ease-in-out infinite}
+        @keyframes floatPfp{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        .pfp-wrap::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--gold);opacity:.5;animation:ringPulse 2s ease-in-out infinite}
+        @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.1);opacity:.9}}
+        .pfp{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);display:block}
+
+        .q-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.1rem,3.5vw,1.9rem);font-weight:900;background:linear-gradient(135deg,#f5e6a3,var(--gold),var(--rose));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite;margin-bottom:.8rem}
+        @keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}
+        .username{color:var(--blush);font-style:italic;font-size:1.05rem;margin-bottom:1.5rem;letter-spacing:.1em}
+        .body-text{color:var(--cream);font-style:italic;font-size:1.05rem;line-height:1.9;margin-bottom:.5rem}
+
+        .btn-row{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem}
+        .btn{font-family:'Cinzel Decorative',cursive;font-size:clamp(.65rem,1.8vw,.85rem);font-weight:700;border:none;border-radius:50px;padding:.9rem 2.2rem;letter-spacing:.08em;transition:all .3s ease;cursor:pointer}
+        .btn-yes{background:linear-gradient(135deg,var(--gold),#e8c840,var(--gold));background-size:200%;color:var(--deep);box-shadow:0 5px 25px rgba(212,175,55,.4);animation:btnShimmer 3s linear infinite}
+        @keyframes btnShimmer{0%{background-position:0%}100%{background-position:200%}}
+        .btn-yes:hover{transform:scale(1.08) translateY(-3px);box-shadow:0 12px 40px rgba(212,175,55,.7)}
+        .btn-no{background:rgba(255,255,255,.07);color:var(--cream);border:1px solid rgba(255,255,255,.2)}
+        .btn-no:hover{background:rgba(201,80,106,.15);border-color:var(--rose)}
+        .btn-chaos{background:rgba(255,32,32,.12);color:#ff9090;border:1px solid rgba(255,32,32,.4)}
+        .btn-chaos:hover{background:rgba(255,32,32,.25);border-color:var(--red)}
+
+        .chance-label{font-family:'Cinzel Decorative',cursive;font-size:clamp(.65rem,1.8vw,.8rem);color:var(--rose);letter-spacing:.2em;margin-bottom:1.2rem;opacity:.85}
+        .big-emoji{font-size:4rem;display:block;margin:0 auto 1.2rem;animation:wobble 1.5s ease-in-out infinite}
+        @keyframes wobble{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.1)}}
+
+        /* NUCLEAR */
+        #nuclearScreen{background:rgba(0,0,0,.98)}
+        .nuke-top{font-family:'Cinzel Decorative',cursive;font-size:.65rem;color:var(--red);letter-spacing:.4em;margin-bottom:.4rem;opacity:.7}
+        .nuke-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.5rem,5vw,3rem);font-weight:900;color:var(--red);text-shadow:0 0 30px rgba(255,32,32,.8);margin-bottom:.4rem;animation:redPulse 1s ease-in-out infinite}
+        @keyframes redPulse{0%,100%{text-shadow:0 0 20px rgba(255,32,32,.5)}50%{text-shadow:0 0 60px rgba(255,32,32,1),0 0 100px rgba(255,32,32,.4)}}
+        .nuke-sub{color:rgba(255,255,255,.45);font-size:.9rem;letter-spacing:.35em;margin-bottom:2.5rem}
+        .launch-panel{background:rgba(255,0,0,.04);border:2px solid rgba(255,32,32,.4);border-radius:20px;padding:2rem 1.8rem;max-width:440px;width:100%;position:relative}
+        .launch-panel::before{content:'⚠ CLASSIFIED ⚠';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:#0d0520;padding:0 1rem;color:var(--red);font-family:'Cinzel Decorative',cursive;font-size:.6rem;letter-spacing:.2em;white-space:nowrap}
+        .panel-row{display:flex;gap:.8rem;align-items:center;margin-bottom:1.2rem}
+        .led{width:11px;height:11px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red);animation:blink 1s step-end infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
+        .led.g{background:var(--green);box-shadow:0 0 8px var(--green);animation-delay:.5s}
+        .panel-text{font-size:.85rem;color:rgba(255,255,255,.65);font-style:italic;letter-spacing:.08em}
+        .countdown{font-family:monospace;font-size:clamp(2rem,6vw,3.2rem);color:var(--red);text-shadow:0 0 20px rgba(255,32,32,.8);background:rgba(0,0,0,.5);border:1px solid rgba(255,32,32,.3);border-radius:10px;padding:.7rem 2rem;display:inline-block;letter-spacing:.15em;margin:1rem 0}
+
+        .cover-assembly{display:flex;flex-direction:column;align-items:center;margin-top:1.8rem;position:relative}
+        .cover-hint{font-size:.6rem;color:rgba(255,255,255,.35);letter-spacing:.25em;font-family:'Cinzel Decorative',cursive;margin-bottom:.8rem}
+        .cover-box{width:120px;height:130px;position:relative}
+        .lid{width:120px;height:65px;background:linear-gradient(180deg,#3a3a3a,#181818);border:2px solid rgba(255,32,32,.5);border-bottom:none;border-radius:60px 60px 0 0;position:absolute;top:0;left:0;transform-origin:50% 100%;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center;padding-bottom:16px}
+        .lid.open{transform:rotate(-130deg)}
+        .lid span{color:rgba(255,255,255,.35);font-size:.55rem;letter-spacing:.2em;font-family:'Cinzel Decorative',cursive}
+        .btn-base{width:120px;height:65px;background:rgba(0,0,0,.5);border:2px solid rgba(255,32,32,.3);border-top:none;border-radius:0 0 10px 10px;position:absolute;bottom:0;left:0;display:flex;align-items:center;justify-content:center}
+        .big-red{width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 33% 33%,#ff6060,var(--red),#6b0000);border:4px solid #7a0000;box-shadow:0 0 20px rgba(255,32,32,.4),inset 0 3px 6px rgba(255,255,255,.15);cursor:pointer;font-family:'Cinzel Decorative',cursive;font-size:.5rem;color:rgba(255,255,255,.75);letter-spacing:.05em;transition:all .25s;position:relative;top:-18px}
+        .big-red:disabled{opacity:.35;cursor:not-allowed}
+        .big-red:not(:disabled):hover{box-shadow:0 0 45px rgba(255,32,32,.9),inset 0 3px 6px rgba(255,255,255,.25);transform:scale(1.06)}
+        .big-red.pressed{transform:scale(.9) translateY(4px);box-shadow:0 0 70px rgba(255,32,32,1)}
+        .nuke-hint{color:rgba(255,32,32,.55);font-size:.75rem;margin-top:1.2rem;font-style:italic;letter-spacing:.1em;min-height:1.2em}
+
+        /* LAUNCH OVERLAY */
+        #launchOverlay{position:fixed;inset:0;z-index:500;background:#000;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:0;overflow:hidden;}
+        #launchOverlay.active{display:flex;overflow-y:auto}
+        .launch-iframe{width:min(90vw,640px);height:min(50vw,360px);border-radius:12px;border:3px solid var(--red);box-shadow:0 0 60px rgba(255,32,32,.5)}
+        #postMsg{text-align:center;max-width:100%;width:100%;display:none;}
+        .post-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.1rem,3.5vw,2rem);background:linear-gradient(135deg,var(--gold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite;margin-bottom:1.2rem}
+        .post-body{font-size:clamp(.95rem,2vw,1.15rem);color:var(--cream);line-height:1.9;font-style:italic;margin-bottom:.8rem}
+        .back-btn{font-family:'Cinzel Decorative',cursive;font-size:.8rem;background:linear-gradient(135deg,var(--gold),#e8c840);color:var(--deep);border:none;border-radius:50px;padding:.85rem 2rem;margin-top:1.5rem;cursor:pointer;box-shadow:0 5px 25px rgba(212,175,55,.4);transition:all .3s;animation:btnShimmer 3s linear infinite}
+        .back-btn:hover{transform:scale(1.05) translateY(-2px)}
+
+        /* YES SCREEN */
+        .yes-emoji{font-size:4rem;display:block;margin-bottom:1rem;animation:bounce 1s ease-in-out infinite}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+        .yes-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.2rem,4vw,2.2rem);background:linear-gradient(135deg,var(--gold),var(--rose),var(--lavender));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite;margin-bottom:1rem}
+
+        .confetti-burst{position:fixed;inset:0;z-index:300;pointer-events:none}
+        .flash{position:fixed;inset:0;z-index:400;background:white;opacity:0;pointer-events:none;transition:opacity .08s}
+        .flash.on{opacity:1}
+        ::-webkit-scrollbar{display:none}
+    </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"><svg viewBox="0 0 24 24"><path fill="#d4af37" d="M12 3c0 0-4 4-4 8s1.8 5.5 4 7c2.2-1.5 4-3 4-7s-4-8-4-8z"/><path fill="#c9506a" d="M12 3c0 0 5 3 7 7s-2 8-7 8c5 0 7-4 7-8S12 3 12 3z" opacity="0.6"/><path fill="#9b72cf" d="M12 3c0 0-7 3-7 7s2 8 7 8c-5 0-7-4-7-8S12 3 12 3z" opacity="0.6"/></svg></div>
+<div class="bg-gradient"></div>
+<div class="stars" id="stars"></div>
+<div class="flash" id="flash"></div>
+<div class="confetti-burst" id="confettiBurst"></div>
+
+<!-- ═══ SCREEN 1 — THE QUESTION ═══ -->
+<div class="screen" id="s1">
+    <div class="card">
+        <div class="ornament"><div class="ornament-line"></div><span style="color:var(--gold);font-size:1.2rem">🦋</span><div class="ornament-line r"></div></div>
+        <div class="pfp-wrap"><img src="cat.jpg" class="pfp" alt="Profile"></div>
+        <div class="q-title">One last tiny thing... 🦋</div>
+        <div class="username">@abderrahmane.rouah sent you a follow request</div>
+        <p class="body-text">You've seen the whole world I built just for you today.<br>Now can I have a small corner of <em style="color:var(--gold)">yours?</em> 💛</p>
+        <div class="btn-row">
+            <button class="btn btn-yes" onclick="goYes()">✅ Yes, of course!</button>
+            <button class="btn btn-no" onclick="goNo(1)">❌ No...</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SCREEN 2 — 2nd CHANCE ═══ -->
+<div class="screen hidden" id="s2">
+    <div class="card">
+        <div class="chance-label">⚠ ARE YOU SURE? — CHANCE 2 OF 3</div>
+        <span class="big-emoji">🥺</span>
+        <div class="q-title">...Really though?</div>
+        <p class="body-text">I made you <em style="color:var(--gold)">butterflies</em>, stars, a whole birthday universe...<br>and you're gonna leave me on <em style="color:var(--rose)">pending?</em></p>
+        <div class="btn-row">
+            <button class="btn btn-yes" onclick="goYes()">💛 Okay fine, YES</button>
+            <button class="btn btn-no" onclick="goNo(2)">😤 Still no.</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SCREEN 3 — LAST CHANCE ═══ -->
+<div class="screen hidden" id="s3">
+    <div class="card">
+        <div class="chance-label">⚠ FINAL WARNING — CHANCE 3 OF 3</div>
+        <span class="big-emoji">😭</span>
+        <div class="q-title">This is your LAST chance.</div>
+        <p class="body-text">I'm <em style="color:var(--rose)">begging</em> you, Chaimae.<br>One little follow. That's all. <em style="color:var(--gold)">One.</em></p>
+        <p style="color:rgba(253,246,227,.45);font-size:.9rem;font-style:italic;margin-top:.5rem">...the alternative is not pretty. ☢</p>
+        <div class="btn-row">
+            <button class="btn btn-yes" onclick="goYes()">🦋 YES YES YES!</button>
+            <button class="btn btn-chaos" onclick="goNo(3)">☢ I choose chaos.</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SCREEN 4 — NUCLEAR LAUNCH PAD ═══ -->
+<div class="screen hidden" id="s4">
+    <div class="nuke-top">⚠ &nbsp; emergency protocol activated &nbsp; ⚠</div>
+    <div class="nuke-title">NUCLEAR LAUNCH</div>
+    <div class="nuke-sub">AUTHORIZATION REQUIRED</div>
+    <div class="launch-panel">
+        <div class="panel-row">
+            <div class="led"></div><div class="led g"></div><div class="led"></div>
+            <div class="panel-text">SYSTEMS ARMED — TARGET: CHAIMAE'S FEED</div>
+        </div>
+        <div class="panel-row">
+            <div class="led g"></div><div class="panel-text">LAUNCH READY — AWAITING COMMAND</div>
+        </div>
+        <div class="countdown" id="countdown">T-05:00</div>
+        <div style="margin-top:2rem;display:flex;flex-direction:column;align-items:center;gap:1rem">
+            <div class="nuke-top">PRESS TO LAUNCH</div>
+            <button id="bigRed" onclick="pressLaunch()" style="
+                width:110px;height:110px;border-radius:50%;
+                background:radial-gradient(circle at 35% 35%, #ff6060, #cc0000, #6b0000);
+                border:5px solid #7a0000;
+                box-shadow:0 0 30px rgba(255,32,32,.7), 0 6px 0 #4a0000;
+                cursor:pointer;
+                font-family:'Cinzel Decorative',cursive;
+                font-size:.55rem;color:rgba(255,255,255,.9);
+                letter-spacing:.05em;
+            ">☢ LAUNCH</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ LAUNCH OVERLAY ═══ -->
+<div id="launchOverlay" style="display:none">
+    <!-- Video fills screen -->
+    <div id="videoWrap" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;overflow:hidden;"></div>
+    <!-- Post-video: same card style as screens 1-3 -->
+    <div id="postMsg" style="display:none;position:fixed;inset:0;z-index:600;background:var(--deep);align-items:center;justify-content:center;padding:2rem;">
+        <div class="card">
+            <div class="ornament">
+                <div class="ornament-line"></div>
+                <span style="color:var(--gold);font-size:1.2rem">☢</span>
+                <div class="ornament-line r"></div>
+            </div>
+            <span class="big-emoji">😂☢️</span>
+            <div class="q-title">Was that a joke?</div>
+            <p class="body-text">Maybe that was just a joke...<br><span style="color:var(--rose)">OR</span> you actually just launched a nuclear missile because you wouldn't accept a follow request. 💀</p>
+            <p class="body-text" style="color:rgba(253,246,227,.5);font-size:.95rem;">The world may never know.<br>The safer choice is probably just... <em style="color:var(--gold)">say yes.</em> 🦋</p>
+            <div class="btn-row" style="margin-top:1.8rem;">
+                <button class="btn btn-yes" onclick="goYes()">🦋 Fine. I'll accept it.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SCREEN 5 — YES! 🎉 ═══ -->
+<div class="screen hidden" id="s5">
+    <div class="card" style="border-color:rgba(212,175,55,.7);box-shadow:0 0 100px rgba(212,175,55,.25)">
+        <div class="ornament"><div class="ornament-line"></div><span style="color:var(--gold);font-size:1.2rem">✨</span><div class="ornament-line r"></div></div>
+        <span class="yes-emoji">🦋</span>
+        <div class="yes-title">She said YES! 👑✨</div>
+        <p class="body-text">You just made my whole year, Chaimae. 💛<br>Follow request sent — check your notifications, my queen. 🦋<br><br><span style="color:var(--gold)">Happy Birthday, forever and always. ✨</span></p>
+        <div class="btn-row" style="margin-top:2rem">
+            <a href="birthday_reveal.html" style="text-decoration:none"><button class="btn btn-yes">↩ Back to the Beginning 🦋</button></a>
+            <button id="whatifBtn" class="btn btn-chaos" onclick="showWhatIf()" style="border:1px solid rgba(255,32,32,.5);color:#ff9090;background:rgba(255,32,32,.08);">☢ What if I said No? 😈</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SCREEN 6 — WHAT IF SHE SAID NO (replay) ═══ -->
+<div class="screen hidden" id="s_whatif">
+    <div class="card" style="border-color:rgba(255,32,32,.4);box-shadow:0 0 80px rgba(255,32,32,.15)">
+        <div class="ornament"><div class="ornament-line" style="background:linear-gradient(to right,transparent,var(--red))"></div><span style="font-size:1.2rem">☢</span><div class="ornament-line r" style="background:linear-gradient(to left,transparent,var(--red))"></div></div>
+        <span class="big-emoji" style="font-size:3.5rem">😈</span>
+        <div class="q-title" style="background:linear-gradient(135deg,var(--red),#ff9090,var(--red));-webkit-background-clip:text;background-clip:text;">So you want to see chaos?</div>
+        <p class="body-text">Fine. Let's say you had said no...<br>Here is exactly what would have happened. 😂☢️</p>
+        <div class="btn-row" style="margin-top:1.5rem">
+            <button class="btn btn-chaos" onclick="replayNo()" style="border:1px solid rgba(255,32,32,.5);color:#ff9090;background:rgba(255,32,32,.08);">☢ Show me the chaos</button>
+            <button class="btn btn-yes" onclick="show('s5')">↩ Back to Yes 💛</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showWhatIf() {
+        stopAudio && stopAudio();
+        show('s_whatif');
+    }
+    function replayNo() {
+        reachedLaunch = false;
+        // Reset nuclear state so it can be replayed
+        coverUp = false;
+        secs = 300;
+        clearInterval(cdInterval);
+        document.getElementById('lid').classList.remove('open');
+        document.getElementById('bigRed').disabled = true;
+        document.getElementById('nukeHint').textContent = '⚠ Lift the cover to arm the launch sequence ⚠';
+        document.getElementById('nukeHint').style.color = '';
+        document.getElementById('countdown').textContent = 'T-05:00';
+        const ov1=document.getElementById('launchOverlay');ov1.classList.remove('active');ov1.style.display='none';document.getElementById('videoWrap').innerHTML='';document.getElementById('postMsg').style.display='none';
+        show('s1');
+        // Auto-click No 3 times after small delays so she sees the full journey
+        setTimeout(() => goNo(1), 600);
+    }
+</script>
+
+<script>
+    // CURSOR
+    const cursor=document.getElementById('cursor');
+    document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';});
+
+    // STARS
+    const starsEl=document.getElementById('stars');
+    for(let i=0;i<40;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*3+1;s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*4+2}s;--delay:${Math.random()*5}s;--op:${Math.random()*.6+.2}`;starsEl.appendChild(s);}
+
+    function show(id){
+        document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    // Track whether she reached the nuclear launch
+    let reachedLaunch = false;
+
+    function goYes(){
+        spawnConfetti();
+        // Kill the overlay completely — pause video, clear content, force hide
+        const overlay = document.getElementById('launchOverlay');
+        if(overlay){
+            // Pause any playing video first
+            const vids = overlay.querySelectorAll('video');
+            vids.forEach(v => { v.pause(); v.src = ''; });
+            overlay.classList.remove('active');
+            overlay.style.cssText = 'display:none !important';
+            document.getElementById('videoWrap').innerHTML = '';
+            document.getElementById('postMsg').style.display = 'none';
+        }
+        // Show or hide the "What if I said No?" button depending on path
+        const whatifBtn = document.getElementById('whatifBtn');
+        if(whatifBtn) whatifBtn.style.display = reachedLaunch ? 'none' : 'inline-block';
+        setTimeout(()=>show('s5'), 400);
+    }
+
+    function goNo(n){
+        if(n===1) show('s2');
+        else if(n===2) show('s3');
+        else{show('s4');startCountdown();}
+    }
+
+    // ─── NUCLEAR ─────────────────────────────────────────────────
+    let secs=300, cdInterval=null, coverUp=false;
+
+    function startCountdown(){
+        cdInterval=setInterval(()=>{
+            secs--;if(secs<0)secs=0;
+            const m=String(Math.floor(secs/60)).padStart(2,'0');
+            const s=String(secs%60).padStart(2,'0');
+            document.getElementById('countdown').textContent=`T-${m}:${s}`;
+            if(secs===0) clearInterval(cdInterval);
+        },1000);
+    }
+
+    function liftCover(){
+        if(coverUp)return;
+        coverUp=true;
+        document.getElementById('lid').classList.add('open');
+        document.getElementById('bigRed').disabled=false;
+        document.getElementById('nukeHint').textContent='☢  LAUNCH ARMED — PRESS TO FIRE  ☢';
+        document.getElementById('nukeHint').style.color='rgba(255,32,32,.9)';
+    }
+
+    function pressLaunch(){
+        reachedLaunch = true;
+        clearInterval(cdInterval);
+        document.getElementById('bigRed').disabled = true;
+
+        // flash effect
+        const flash = document.getElementById('flash');
+        [0,200,400].forEach(t => setTimeout(() => {
+            flash.classList.add('on');
+            setTimeout(() => flash.classList.remove('on'), 120);
+        }, t));
+
+        setTimeout(() => {
+            const overlay = document.getElementById('launchOverlay');
+            overlay.style.display = 'flex';
+
+            const wrap = document.getElementById('videoWrap');
+            wrap.innerHTML = '';
+
+            const vid = document.createElement('video');
+            vid.setAttribute('controls', '');
+            vid.setAttribute('playsinline', '');
+            vid.setAttribute('preload', 'auto');
+            vid.style.cssText = 'width:100%;height:100%;max-height:100%;object-fit:contain;display:block;';
+            const src = document.createElement('source');
+            src.src = 'nuclairlaunch.mp4';
+            src.type = 'video/mp4';
+            vid.appendChild(src);
+            wrap.appendChild(vid);
+            vid.load();
+            vid.play().catch(() => {});
+            vid.addEventListener('ended', showPostMsg);
+            setTimeout(showPostMsg, 45000);
+        }, 500);
+    }
+
+    function showPostMsg(){
+        document.getElementById('videoWrap').innerHTML = '';
+        const pm=document.getElementById('postMsg');pm.style.display='flex';
+    }
+
+    function goBack(){
+        const ov2=document.getElementById('launchOverlay');ov2.classList.remove('active');ov2.style.display='none';document.getElementById('videoWrap').innerHTML='';document.getElementById('postMsg').style.display='none';
+        show('s1');
+    }
+
+    // ─── CONFETTI ────────────────────────────────────────────────
+    function spawnConfetti(){
+        const cols=['#d4af37','#f5e6a3','#c9506a','#f5a0b5','#9b72cf','#d4b8f0','#ffffff','#fdd0e8'];
+        const burst=document.getElementById('confettiBurst');
+        for(let i=0;i<80;i++){
+            setTimeout(()=>{
+                const p=document.createElement('div');
+                const sz=Math.random()*12+5;
+                p.style.cssText=`position:absolute;background:${cols[Math.floor(Math.random()*cols.length)]};left:${Math.random()*100}%;top:-20px;width:${sz}px;height:${sz}px;border-radius:${Math.random()>.5?'50%':'3px'};animation:cFall ${Math.random()*3+3}s ease-in forwards;--dx:${(Math.random()-.5)*300}px;`;
+                burst.appendChild(p);
+                setTimeout(()=>p.remove(),6000);
+            },i*25);
+        }
+    }
+</script>
+
+<style>
+@keyframes cFall{0%{transform:translate(0,0) rotate(0deg);opacity:1}100%{transform:translate(var(--dx,0),110vh) rotate(720deg);opacity:0}}
+</style>
+
+
+<!-- ══════════ VOICE / SPEECH SYSTEM (MP3) ══════════ -->
+<script>
+(function(){
+    // MP3 paths — one file per screen
+    const AUDIO = {
+        s1:      'voice_s1.mp3',
+        s2:      'voice_s2.mp3',
+        s3:      'voice_s3.mp3',
+        s4:      'voice_s4.mp3',
+        postMsg: 'voice_post.mp3',
+        s5:      'voice_s5.mp3'
+    };
+
+    let current = null;
+
+    function stopAudio() {
+        if (current) { current.pause(); current.currentTime = 0; current = null; }
+    }
+
+    function playFor(screenId) {
+        stopAudio();
+        const path = AUDIO[screenId];
+        if (!path) return;
+        const a = new Audio(path);
+        current = a;
+        a.play().catch(() => {});
+    }
+
+    // Wrap show()
+    const _show = window.show;
+    window.show = function(id) {
+        _show(id);
+        setTimeout(() => playFor(id), 350);
+    };
+
+    // Wrap goYes
+    const _goYes = window.goYes;
+    window.goYes = function() {
+        stopAudio();
+        _goYes();
+        setTimeout(() => playFor('s5'), 400);
+    };
+
+    // Wrap showPostMsg
+    const _showPostMsg = window.showPostMsg;
+    window.showPostMsg = function() {
+        _showPostMsg();
+        setTimeout(() => playFor('postMsg'), 400);
+    };
+
+    // Wrap goBack
+    const _goBack = window.goBack;
+    window.goBack = function() {
+        stopAudio();
+        _goBack();
+        setTimeout(() => playFor('s1'), 400);
+    };
+
+    window.stopAudio = stopAudio;
+
+    // Play on first load
+    window.addEventListener('load', () => {
+        setTimeout(() => playFor('s1'), 800);
+    });
+})();
+</script>
+
+</body>
+</html>

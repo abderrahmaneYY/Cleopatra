@@ -504,103 +504,72 @@
         
         
     </script>
-    <audio id="bgMusic" loop autoplay>
-        <source src="song.mp3" type="audio/mpeg">
-    </audio>
+
+
+    <script>
+        // On first page: start music when user clicks Enter button
+        document.querySelector('.enter-btn').addEventListener('click', function(){
+            sessionStorage.setItem('bgTime', '0');
+            sessionStorage.setItem('bgVol', '0.5');
+        });
+    </script>
+    <audio id="bgMusic" loop src="song.mp3" preload="auto"></audio>
 
     <!-- VOLUME CONTROL -->
-    <div id="volumeWidget" style="
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(13,5,32,0.75);
-        border: 1px solid rgba(212,175,55,0.4);
-        border-radius: 50px;
-        padding: 10px 18px;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 4px 24px rgba(212,175,55,0.15);
-    ">
+    <div id="volumeWidget" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;align-items:center;gap:10px;background:rgba(13,5,32,0.75);border:1px solid rgba(212,175,55,0.4);border-radius:50px;padding:10px 18px;backdrop-filter:blur(12px);box-shadow:0 4px 24px rgba(212,175,55,0.15);">
         <span id="volIcon" style="font-size:1.2rem;cursor:pointer;user-select:none;" title="Mute/Unmute">🔊</span>
-        <input id="volSlider" type="range" min="0" max="100" value="50" style="
-            -webkit-appearance: none;
-            width: 100px;
-            height: 4px;
-            border-radius: 2px;
-            background: linear-gradient(to right, #d4af37 50%, rgba(255,255,255,0.15) 50%);
-            outline: none;
-            cursor: pointer;
-        "/>
+        <input id="volSlider" type="range" min="0" max="100" value="50" style="-webkit-appearance:none;width:100px;height:4px;border-radius:2px;background:linear-gradient(to right,#d4af37 50%,rgba(255,255,255,0.15) 50%);outline:none;cursor:pointer;"/>
         <span id="volValue" style="color:#d4af37;font-family:'Cormorant Garamond',serif;font-size:0.9rem;min-width:32px;">50%</span>
     </div>
 
     <style>
-        #volSlider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 14px; height: 14px;
-            border-radius: 50%;
-            background: #d4af37;
-            box-shadow: 0 0 6px rgba(212,175,55,0.8);
-            cursor: pointer;
-        }
-        #volSlider::-moz-range-thumb {
-            width: 14px; height: 14px;
-            border-radius: 50%;
-            background: #d4af37;
-            box-shadow: 0 0 6px rgba(212,175,55,0.8);
-            cursor: pointer;
-            border: none;
-        }
+        #volSlider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#d4af37;box-shadow:0 0 6px rgba(212,175,55,0.8);cursor:pointer;}
+        #volSlider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#d4af37;box-shadow:0 0 6px rgba(212,175,55,0.8);cursor:pointer;border:none;}
     </style>
 
     <script>
-        const music = document.getElementById('bgMusic');
-        const slider = document.getElementById('volSlider');
-        const volValue = document.getElementById('volValue');
-        const volIcon = document.getElementById('volIcon');
-
-        music.volume = 0.5;
-        let lastVol = 0.5;
-
-        const tryPlay = () => { music.play().catch(() => {}); };
-        tryPlay();
-        document.addEventListener('click', tryPlay, { once: true });
-        document.addEventListener('touchstart', tryPlay, { once: true });
-        document.addEventListener('keydown', tryPlay, { once: true });
-
-        slider.addEventListener('input', () => {
-            const val = slider.value / 100;
-            music.volume = val;
-            lastVol = val > 0 ? val : lastVol;
-            volValue.textContent = slider.value + '%';
-            volIcon.textContent = val === 0 ? '🔇' : val < 0.4 ? '🔉' : '🔊';
+        (function(){
+            const music   = document.getElementById('bgMusic');
+            const slider  = document.getElementById('volSlider');
+            const volVal  = document.getElementById('volValue');
+            const volIcon = document.getElementById('volIcon');
+            const savedVol = parseFloat(sessionStorage.getItem('bgVol') ?? '0.5');
+            music.volume = savedVol;
+            slider.value = Math.round(savedVol * 100);
+            volVal.textContent = slider.value + '%';
             updateTrack();
-        });
-
-        volIcon.addEventListener('click', () => {
-            if (music.volume > 0) {
-                lastVol = music.volume;
-                music.volume = 0;
-                slider.value = 0;
-                volValue.textContent = '0%';
-                volIcon.textContent = '🔇';
-            } else {
-                music.volume = lastVol;
-                slider.value = Math.round(lastVol * 100);
-                volValue.textContent = slider.value + '%';
-                volIcon.textContent = lastVol < 0.4 ? '🔉' : '🔊';
+            const savedTime = parseFloat(sessionStorage.getItem('bgTime') ?? '0');
+            music.addEventListener('canplay', () => {
+                if (savedTime > 0 && savedTime < music.duration) music.currentTime = savedTime;
+                music.play().catch(()=>{});
+            }, { once: true });
+            setInterval(() => { if (!music.paused) sessionStorage.setItem('bgTime', music.currentTime); }, 1000);
+            slider.addEventListener('input', () => {
+                const val = slider.value / 100;
+                music.volume = val;
+                sessionStorage.setItem('bgVol', val);
+                volVal.textContent = slider.value + '%';
+                volIcon.textContent = val === 0 ? '🔇' : val < 0.4 ? '🔉' : '🔊';
+                updateTrack();
+            });
+            let lastVol = savedVol || 0.5;
+            volIcon.addEventListener('click', () => {
+                if (music.volume > 0) {
+                    lastVol = music.volume; music.volume = 0; slider.value = 0;
+                    volVal.textContent = '0%'; volIcon.textContent = '🔇';
+                } else {
+                    music.volume = lastVol; slider.value = Math.round(lastVol * 100);
+                    volVal.textContent = slider.value + '%';
+                    volIcon.textContent = lastVol < 0.4 ? '🔉' : '🔊';
+                }
+                sessionStorage.setItem('bgVol', music.volume);
+                updateTrack();
+            });
+            function updateTrack(){
+                const pct = slider.value + '%';
+                slider.style.background = `linear-gradient(to right,#d4af37 ${pct},rgba(255,255,255,0.15) ${pct})`;
             }
-            updateTrack();
-        });
-
-        function updateTrack() {
-            const pct = slider.value + '%';
-            slider.style.background = `linear-gradient(to right, #d4af37 ${pct}, rgba(255,255,255,0.15) ${pct})`;
-        }
+        })();
     </script>
-
 </body>
 </html>
